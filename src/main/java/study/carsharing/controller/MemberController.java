@@ -43,6 +43,7 @@ public class MemberController {
         member.setPassword(passwordEncoder.encode(member.getPassword()));
         member.setRole("MEMBER");
         memberService.save(member);
+        System.out.println("test git PR");
 
         return "redirect:/login";
     }
