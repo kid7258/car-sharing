@@ -29,20 +29,20 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/join", "/login").permitAll()
-                    .anyRequest().authenticated()
-                    .and()
+                    .antMatchers("/join", "/login", "/check").permitAll()
+                    .anyRequest().authenticated();
+
                 // 추후 csrf 찾아본 후 반영 disable 제거 예정
+        http
                 .csrf()
-                    .disable()
+                    .disable();
+
+        http
                 .formLogin()
                     .loginPage("/login")
-                    .defaultSuccessUrl("/")
-                    .permitAll()
-                    .and()
-                .logout()
-                    .logoutSuccessUrl("/login")
-                    .invalidateHttpSession(true);
+                    .defaultSuccessUrl("/", true)
+                    .usernameParameter("id")
+                    .passwordParameter("password");
     }
 
     @Override
