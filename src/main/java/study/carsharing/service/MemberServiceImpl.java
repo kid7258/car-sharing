@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import study.carsharing.domain.Member;
 import study.carsharing.repository.MemberRepository;
 
+import java.util.List;
+
 @Service
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
@@ -20,5 +22,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member findMember(Member member) {
         return memberRepository.findByEmail(member.getEmail()).get();
+    }
+
+    @Override
+    public List<Member> findAll() {
+        return memberRepository.findAll();
     }
 }
