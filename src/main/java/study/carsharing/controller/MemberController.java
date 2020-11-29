@@ -44,6 +44,7 @@ public class MemberController {
         member.setRole("MEMBER");
         memberService.save(member);
         System.out.println("test git PR");
+        System.out.println("test git PR");
 
         return "redirect:/login";
     }
