@@ -1,19 +1,15 @@
 package study.carsharing.controller;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import study.carsharing.domain.Board;
 import study.carsharing.service.BoardService;
 import study.carsharing.service.MemberService;
 
 import java.time.LocalDateTime;
 
-@Controller
+@RestController
+@RequestMapping("/api")
 public class BoardController {
     private BoardService boardService;
     private MemberService memberService;
@@ -24,33 +20,22 @@ public class BoardController {
     }
 
     @GetMapping("/board")
-    public String board(Model model) {
-        model.addAttribute("boards", boardService.findAll());
-        return "board/board";
+    public ResponseEntity board() {
+        return ResponseEntity.ok().body(boardService.findAll());
     }
 
     @GetMapping("/board/{id}")
-    public String boardById(@PathVariable Long id, Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("username", memberService.findByEmail(auth.getName()).get().getName());
-        model.addAttribute("board", boardService.findById(id));
-
-        return "board/boardDetail";
-    }
-
-    @GetMapping("/board/new")
-    public String boardForm() {
-        return "board/boardForm";
+    public ResponseEntity boardById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(boardService.findById(id));
     }
 
     @PostMapping("/board/new")
-    public String create(Board board) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        board.setMemberId(memberService.findByEmail(auth.getName()).get().getId());
+    public ResponseEntity create(@RequestBody Board board) {
+        // Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         board.setCreatedDate(LocalDateTime.now());
         board.setUpdatedDate(LocalDateTime.now());
 
         boardService.save(board);
-        return "board/board";
+        return ResponseEntity.ok().body(board);
     }
 }
