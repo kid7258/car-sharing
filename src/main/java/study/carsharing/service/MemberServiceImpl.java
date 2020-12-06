@@ -5,6 +5,7 @@ import study.carsharing.domain.Member;
 import study.carsharing.repository.MemberRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -20,8 +21,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member findByEmail(String email) {
-        return memberRepository.findByEmail(email).get();
+    public Optional<Member> findByEmail(String email) {
+        return memberRepository.findByEmail(email);
     }
 
     @Override
