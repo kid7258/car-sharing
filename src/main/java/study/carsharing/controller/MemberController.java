@@ -3,17 +3,18 @@ package study.carsharing.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import study.carsharing.configuration.JwtTokenProvider;
 import study.carsharing.domain.Member;
 import study.carsharing.form.CustomToken;
 import study.carsharing.service.MemberService;
-
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -35,23 +36,16 @@ public class MemberController {
         return "login";
     }
 
-    @PostMapping(value = "/login")
-    public ResponseEntity login(@RequestBody Member member) {
-        System.out.println(member);
-
-        Optional<Member> findMember = memberService.findByEmail(member.getEmail());
-        if(findMember.isEmpty()) {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        if (!passwordEncoder.matches(member.getPassword(), findMember.get().getPassword())) {
-            throw new BadCredentialsException("User invalid");
-        }
-
-        return ResponseEntity.ok().body(new CustomToken(jwtTokenProvider
-                                                                .createToken(findMember.get().getEmail(),
-                                                                             findMember.get().getId(),
-                                                                             findMember.get().getRole())));
+    @PostMapping(
+            value = "/login",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity login(@RequestBody Member memberDto) {
+        Member member = memberService.findByEmail(memberDto.getEmail(), memberDto.getPassword());
+        return ResponseEntity.ok().body(new CustomToken(jwtTokenProvider.createToken(member.getEmail(),
+                                                                                     member.getId(),
+                                                                                     member.getRole())));
     }
 
     @PostMapping("/join")
