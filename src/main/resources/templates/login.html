@@ -6,7 +6,7 @@
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 <body>
-    <form id="loginForm" action="/api/login" method="post">
+    <form id="loginForm">
         <label>ID : </label>
         <input type="text" placeholder="Enter Username" name="email" required>
         <label>Password : </label>
@@ -17,7 +17,11 @@
 </body>
 
 <script>
-  $("form").submit(function () {
+  $("form").submit(function (event) {
+    return false;
+  });
+
+  $("#submitBtn").click(function () {
     var data = {};
     $.each($('#loginForm').serializeArray(), function (index, field) {
       data[field.name] = field.value;
@@ -27,6 +31,7 @@
       type: 'POST',
       url: '/api/login',
       contentType: "application/json",
+      Accept: "application/json",
       data: JSON.stringify(data),
       success: function (data) {
         // Do something
