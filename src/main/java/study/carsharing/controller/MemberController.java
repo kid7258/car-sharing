@@ -1,6 +1,7 @@
 package study.carsharing.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,20 +35,23 @@ public class MemberController {
         return "login";
     }
 
-    @PostMapping("/login")
-    public ResponseEntity login(@RequestBody Map<String, String> member) {
+    @PostMapping(value = "/login")
+    public ResponseEntity login(@RequestBody Member member) {
         System.out.println(member);
 
-        Optional<Member> findMember = memberService.findByEmail(member.get("email"));
+        Optional<Member> findMember = memberService.findByEmail(member.getEmail());
         if(findMember.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
 
-        if (!passwordEncoder.matches(member.get("password"), findMember.get().getPassword())) {
+        if (!passwordEncoder.matches(member.getPassword(), findMember.get().getPassword())) {
             throw new BadCredentialsException("User invalid");
         }
 
-        return ResponseEntity.ok().body(new CustomToken(jwtTokenProvider.createToken(findMember.get().getEmail(), findMember.get().getId(), findMember.get().getRole())));
+        return ResponseEntity.ok().body(new CustomToken(jwtTokenProvider
+                                                                .createToken(findMember.get().getEmail(),
+                                                                             findMember.get().getId(),
+                                                                             findMember.get().getRole())));
     }
 
     @PostMapping("/join")
