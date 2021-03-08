@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
 public class MemberController {
     // https://webfirewood.tistory.com/115 참고
     private final MemberService memberService;
@@ -47,7 +46,8 @@ public class MemberController {
             throw new BadCredentialsException("User invalid");
         }
 
-        return ResponseEntity.ok().body(new CustomToken(jwtTokenProvider.createToken(findMember.get().getEmail(), findMember.get().getId(), findMember.get().getRole())));
+        CustomToken token = new CustomToken(jwtTokenProvider.createToken(findMember.get().getEmail(), findMember.get().getId(), findMember.get().getRole()));
+        return ResponseEntity.ok().body(token);
     }
 
     @PostMapping("/join")
