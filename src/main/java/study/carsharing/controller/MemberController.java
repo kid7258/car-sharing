@@ -1,5 +1,7 @@
 package study.carsharing.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,6 +16,7 @@ import study.carsharing.service.MemberService;
 import java.util.Map;
 import java.util.Optional;
 
+@Api(tags = {"Member"})
 @RestController
 public class MemberController {
     // https://webfirewood.tistory.com/115 참고
@@ -28,21 +31,14 @@ public class MemberController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    @GetMapping("/login")
-    public String loginForm() {
-        return "login";
-    }
-
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody Map<String, String> member) {
-        System.out.println(member);
-
         Optional<Member> findMember = memberService.findByEmail(member.get("email"));
         if(findMember.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
 
-        if (!passwordEncoder.matches(member.get("password"), findMember.get().getPassword())) {
+        if (!member.get("password").equals(findMember.get().getPassword())) {
             throw new BadCredentialsException("User invalid");
         }
 
@@ -52,19 +48,17 @@ public class MemberController {
 
     @PostMapping("/join")
     public ResponseEntity join(@RequestBody Member member) {
-        System.out.println(member);
-        member.setPassword(passwordEncoder.encode(member.getPassword()));
-        member.setRole("MEMBER");
         memberService.save(member);
-
         return ResponseEntity.ok().body(member);
     }
 
+    @ApiOperation(value = "전체 회원 조회", httpMethod = "GET", notes = "모든 회원을 조회함")
     @GetMapping("/member")
     public ResponseEntity members() {
         return ResponseEntity.ok().body(memberService.findAll());
     }
 
+    @ApiOperation(value = "회원 조회", httpMethod = "GET", notes = "특정 ID를 가진 회원을 조회함")
     @GetMapping("/member/{id}")
     public ResponseEntity members(@PathVariable("id") Long id) {
         return ResponseEntity.ok().body(memberService.findById(id));
