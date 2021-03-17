@@ -9,7 +9,6 @@ import study.carsharing.service.MemberService;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/api")
 public class BoardController {
     private BoardService boardService;
     private MemberService memberService;

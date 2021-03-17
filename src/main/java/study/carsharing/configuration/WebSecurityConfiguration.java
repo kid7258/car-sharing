@@ -45,7 +45,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login", "/join").permitAll()
+                .antMatchers("/login",
+                        "/join",
+                        "/v2/api-docs",
+                        "/configuration/ui",
+                        "/configuration/security",
+                        "/swagger/**",
+                        "/swagger-ui.html",
+                        "/swagger-resources/**",
+                        "/webjars/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -54,7 +62,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOrigin("http://127.0.0.1:4200");
+        corsConfiguration.addAllowedOrigin("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.setAllowCredentials(true);

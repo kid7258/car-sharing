@@ -15,6 +15,8 @@ public class Member implements UserDetails {
     private String name;
     private String password;
     private String role;
+    private String phone;
+    private String department;
 
     public Long getId() {
         return id;
@@ -56,6 +58,22 @@ public class Member implements UserDetails {
         this.role = role;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
     @Override
     public String toString() {
         return "Member{" +
@@ -64,6 +82,8 @@ public class Member implements UserDetails {
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
+                ", phone='" + phone + '\'' +
+                ", department='" + department + '\'' +
                 '}';
     }
 
