@@ -30,7 +30,6 @@ public class BoardController {
 
     @PostMapping("/board/new")
     public ResponseEntity create(@RequestBody Board board) {
-        // Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         board.setCreatedDate(LocalDateTime.now());
         board.setUpdatedDate(LocalDateTime.now());
 

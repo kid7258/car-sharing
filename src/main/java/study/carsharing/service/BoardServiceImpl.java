@@ -7,6 +7,7 @@ import study.carsharing.repository.BoardRepository;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
 public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
