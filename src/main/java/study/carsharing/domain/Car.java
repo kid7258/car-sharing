@@ -12,7 +12,7 @@ public class Car {
     private String image;
     private String engine;
     private String parking;
-    private String etc;
+    private String quantity;
 
     public Long getId() {
         return id;
@@ -62,12 +62,12 @@ public class Car {
         this.parking = parking;
     }
 
-    public String getEtc() {
-        return etc;
+    public String getQuantity() {
+        return quantity;
     }
 
-    public void setEtc(String etc) {
-        this.etc = etc;
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class Car {
                 ", image='" + image + '\'' +
                 ", engine='" + engine + '\'' +
                 ", parking='" + parking + '\'' +
-                ", etc='" + etc + '\'' +
+                ", quantity='" + quantity + '\'' +
                 '}';
     }
 }
